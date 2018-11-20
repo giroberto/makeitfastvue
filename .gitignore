@@ -4,6 +4,7 @@ coverage
 coverage
 site
 .idea
+my_file.json
 docs/build
 test/data/output
 test/acceptance/output
