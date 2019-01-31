@@ -17,20 +17,10 @@
             show-empty
             stacked="md"
             @filtered="onFiltered"
-        >
-            <template slot="actions" slot-scope="row">
-                <!-- We use @click.stop here to prevent a 'row-clicked' event from also happening -->
-                <b-button size="sm" @click.stop="info(row.item, row.index, $event.target)" class="mr-1">
-                    Info modal
-                </b-button>
-                <b-button size="sm" @click.stop="row.toggleDetails">
-                    {{ row.detailsShowing ? 'Hide' : 'Show' }} Details
-                </b-button>
-            </template>
+            @row-clicked="showDetails">
+        <span slot="jobLocation" slot-scope="jobs" v-html="jobs.value">     
+        </span>
         </b-table>
-        <b-modal id="modalInfo" size="lg" @hide="resetModal" :title="modalInfo.jobName" ok-only>
-            <pre>{{ modalInfo.content }}</pre>
-        </b-modal>
     </div>
 </template>
 
@@ -41,31 +31,26 @@ export default {
     return {
       modalInfo: { jobName: "", content: "" },
       jobs: jobs.jobs,
+      sortBy: 'jobPublicationDate',
+      sortDesc: true,
       fields: [
-        "jobName",
-        "jobPublicationDate",
-        "jobEmployer",
-        "jobLocation",
-        "jobStartDate",
-        "actions"
+        { key: "jobName", sortable: true},
+        { key: "jobPublicationDate", sortable: true},
+        { key: "jobEmployer", sortable: true},
+        { key: "jobLocation", sortable: true}
       ],
       filter: null
     };
   },
   methods: {
-    info(item, index, button) {
-      this.modalInfo.jobName = `Row index: ${index}`;
-      this.modalInfo.content = JSON.stringify(item, null, 2);
-      this.$root.$emit("bv::show::modal", "modalInfo", button);
-    },
-    resetModal() {
-      this.modalInfo.jobName = "";
-      this.modalInfo.content = "";
-    },
     onFiltered(filteredItems) {
       // Trigger pagination to update the number of buttons/pages due to filtering
       this.totalRows = filteredItems.length;
       this.currentPage = 1;
+    },
+    showDetails(record, index){
+        this.$router.push({ name: 'detail', params: { arbeit:record } })
+        console.log(record);
     }
   }
 };

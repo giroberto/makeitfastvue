@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import Home from '@/views/Home.vue'
+import Detail from '@/views/Detail.vue'
 
 Vue.use(Router)
 
@@ -13,6 +14,11 @@ export default new Router({
       name: 'home',
       component: Home
     },
+    {
+      path: '/details/{id}',
+      name: 'detail',
+      component: Detail
+    }
     // {
     //   path: '/arbeit/{id}',
     //   name: 'about',
